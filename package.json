@@ -1,0 +1,36 @@
+{
+  "name": "application-generator-api",
+  "version": "1.0.0",
+  "description": "API for generator of application for an entry with an ECTS deficit for AGH in Cracow (UST). ",
+  "main": "app/app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xkamson/application-generator-api.git"
+  },
+  "keywords": [
+    "nodejs",
+    "javascript",
+    "redis",
+    "api",
+    "agh"
+  ],
+  "author": "Marcin Kaminski, Krzysztof Janecki",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/xkamson/application-generator-api/issues"
+  },
+  "homepage": "https://github.com/xkamson/application-generator-api#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.16.4",
+    "redis": "^2.8.0"
+  },
+  "devDependencies": {
+    "eslint": "^5.15.1",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.16.0"
+  }
+}
