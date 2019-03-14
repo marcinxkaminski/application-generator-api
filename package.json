@@ -4,7 +4,8 @@
   "description": "API for generator of application for an entry with an ECTS deficit for AGH in Cracow (UST). ",
   "main": "app/app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lintfix": "eslint --fix --ext .js,.vue src test/unit test/e2e/specs"
   },
   "repository": {
     "type": "git",
