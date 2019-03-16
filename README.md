@@ -31,6 +31,3 @@ API for generator of application for an entry with an ECTS deficit for AGH in Cr
   * [**Marcin Kamiński**](https://github.com/xkamson)
   * [**Krzysztof Janecki**](https://github.com/kjanecki)
 
-
-## License
-This project is licensed under the MIT License.
