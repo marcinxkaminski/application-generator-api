@@ -3,13 +3,13 @@
 API for generator of application for an entry with an ECTS deficit for AGH in Cracow (UST).
 
 ### Prerequisites
-    #### We use:
-      - [Cors](https://github.com/expressjs/cors)
-      - [Express](https://github.com/expressjs/express)
-      - [Node-Cron](https://github.com/node-cron/node-cron)
-      - [Node-Fetch](https://github.com/bitinn/node-fetch)
-      - [Eslint](https://github.com/eslint/eslint)
-      - [Eslint-Airbnb](https://github.com/airbnb/javascript)
+   #### We use:
+   - [Cors](https://github.com/expressjs/cors)
+   - [Express](https://github.com/expressjs/express)
+   - [Node-Cron](https://github.com/node-cron/node-cron)
+   - [Node-Fetch](https://github.com/bitinn/node-fetch)
+   - [Eslint](https://github.com/eslint/eslint)
+   - [Eslint-Airbnb](https://github.com/airbnb/javascript)
 
 
 ### Installing
