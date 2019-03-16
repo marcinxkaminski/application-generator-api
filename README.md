@@ -12,20 +12,19 @@ API for generator of application for an entry with an ECTS deficit for AGH in Cr
    - [Eslint-Airbnb](https://github.com/airbnb/javascript)
 
 
-### Installing
-  1. npm install
-  2. npm start
+## Installing
+  1. `npm install`
+  2. `npm start`
 
+
+## Running the Eslint
+   - `npm eslint:fix`
 
 ## Running the tests
-  TODO: Explain how to run the automated tests for this system
+  1. `npm test`
 
-### Break down into end to end tests
+#### Break down into end to end tests
   TODO: Explain what these tests test and why
-
-  ```
-  Give an example
-  ```
 
 
 ## Authors
