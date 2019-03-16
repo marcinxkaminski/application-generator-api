@@ -33,4 +33,4 @@ API for generator of application for an entry with an ECTS deficit for AGH in Cr
 
 
 ## License
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the MIT License.
