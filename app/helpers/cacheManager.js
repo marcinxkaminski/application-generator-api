@@ -3,9 +3,13 @@ const cache = require('./../data/cache');
 const { getSyllabus } = require('./../helpers/syllabusHelper');
 
 async function update() {
-  Object.entries(await getSyllabus()).forEach(([key, value]) => {
-    cache.set(key, value);
-  });
+  try {
+    Object.entries(await getSyllabus()).forEach(([key, value]) => {
+      cache.set(key, value);
+    });
+  } catch (err) {
+    console.error(err);
+  }
 }
 
 async function get(field) {
@@ -18,7 +22,7 @@ async function get(field) {
   return cache.get(field);
 }
 
-cron.schedule('5 5 * * 7', async () => update());
+cron.schedule('5 5 * * 7', update);
 
 module.exports = {
   get,
