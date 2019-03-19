@@ -1,7 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-// const SyllabusController = require('./controllers/syllabusController');
-// const GeneratorController = require('./controllers/generatorController');
+const SyllabusController = require('./controllers/syllabusController');
 
 const app = express();
 const port = process.env.PORT || 8080;
@@ -11,8 +10,7 @@ app.use(cors());
 app.options('*', cors());
 
 // Routes
-// app.use('/syllabus', SyllabusController);
-// app.use('/generator', GeneratorController);
+app.use('/syllabus', SyllabusController);
 
 // Server
 app.listen(port, 'localhost', function () {
