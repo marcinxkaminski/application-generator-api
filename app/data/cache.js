@@ -9,13 +9,13 @@ const cache = {
   deans: {},
 };
 
-const set = (key, value) => {
+async function set(key, value) {
   if (key && value) {
     cache[key] = value;
   }
 };
 
-const get = key => cache[key];
+function get(key) { return cache[key] };
 
 module.exports = {
   get,
