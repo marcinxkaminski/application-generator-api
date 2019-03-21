@@ -6,21 +6,15 @@ const cache = require('./../data/cache');
 const { getSyllabus } = require('./../helpers/syllabusHelper');
 
 async function setValuesFromObjectInCache(obj) {
-  const setPromises = [];
-
-  Object.entries(data).forEach(([key, value]) => {
-    setPromises.push(() => { cache.set(key, value); });
+  Object.entries(obj).forEach(([key, value]) => {
+    cache.set(key, value);
   });
-
-  Promise.all(setPromises);
 }
 
 async function update() {
   try {
     const data = await getSyllabus();
-    if(data){
-      setValuesFromObjectInCache();
-    }
+    setValuesFromObjectInCache(data);
   } catch (err) {
     console.error(err);
   }
@@ -37,7 +31,7 @@ async function get(field) {
 }
 
 cron.schedule('5 5 * * 7', update);
-_setValuesFromObjectInCache(JSON.parse(fs.readFileSync(__dirname + '../data/staticData.json') || {}));
+setValuesFromObjectInCache(JSON.parse(fs.readFileSync(path.resolve(__dirname, '../data/staticData.json')) || {}));
 
 module.exports = {
   get,

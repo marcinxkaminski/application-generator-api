@@ -1,32 +1,67 @@
-// TODO: use redis for caching or shall we write our own cache?
+const cache = require('./../helpers/cacheManager');
 
-const departments = (req, res, next) => {
-  // TODO: implement getting from cache or if empty from syllabus
-};
+function departments(req, res) {
+  // TODO: implement getting from cache
+  try {
+    return res.status(200).send();
+  } catch (err) {
+    return res.status(500).send();
+  }
+}
 
-const cycles = (req, res, next) => {
+function cycles(req, res) {
   // TODO: implement getting from cache or if empty from syllabus
-};
+  try {
+    return res.status(200).send();
+  } catch (err) {
+    return res.status(500).send();
+  }
+}
 
-const types = (req, res, next) => {
+function types(req, res) {
   // TODO: implement getting from cache or if empty from syllabus
-};
+  try {
+    return res.status(200).send();
+  } catch (err) {
+    return res.status(500).send();
+  }
+}
 
-const faculties = (req, res, next) => {
+function faculties(req, res) {
   // TODO: implement getting from cache or if empty from syllabus
-};
+  try {
+    return res.status(200).send();
+  } catch (err) {
+    return res.status(500).send();
+  }
+}
 
-const years = (req, res, next) => {
+function years(req, res) {
   // TODO: implement getting from cache or if empty from syllabus
-};
+  try {
+    return res.status(200).send();
+  } catch (err) {
+    return res.status(500).send();
+  }
+}
 
-const subjects = (req, res, next) => {
+function subjects(req, res) {
   // TODO: implement getting from cache or if empty from syllabus
-};
+  try {
+    return res.status(200).send();
+  } catch (err) {
+    return res.status(500).send();
+  }
+}
 
-const prices = (req, res, next) => {
+function prices(req, res) {
   // TODO: implement getting from cache or if empty from syllabus
-};
+  try {
+    return res.status(200).send();
+  } catch (err) {
+    return res.status(500).send();
+  }
+}
 
 module.exports = {
   departments,
