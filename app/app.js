@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-// const SyllabusController = require('./controllers/syllabusController');
+const SyllabusController = require('./controllers/syllabusController');
 // const GeneratorController = require('./controllers/generatorController');
 
 const app = express();
@@ -11,7 +11,7 @@ app.use(cors());
 app.options('*', cors());
 
 // Routes
-// app.use('/syllabus', SyllabusController);
+app.use('/syllabus', SyllabusController);
 // app.use('/generator', GeneratorController);
 
 // Server

@@ -1,7 +1,9 @@
-// TODO: use redis for caching or shall we write our own cache?
+const cache = require('../helpers/cacheManager');
+const helper = require('../helpers/syllabusHelper');
 
 const departments = (req, res, next) => {
   // TODO: implement getting from cache or if empty from syllabus
+
 };
 
 const cycles = (req, res, next) => {
@@ -12,8 +14,8 @@ const types = (req, res, next) => {
   // TODO: implement getting from cache or if empty from syllabus
 };
 
-const faculties = (req, res, next) => {
-  // TODO: implement getting from cache or if empty from syllabus
+const faculties = async (req, res, next) => {
+  res.json(await helper.getSyllabus());
 };
 
 const years = (req, res, next) => {
