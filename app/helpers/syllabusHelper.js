@@ -1,19 +1,15 @@
 const fetch = require('node-fetch');
 
-// const years = ['2016-2017', '2017-2018'];
-// const faculties = ['weaiiib', 'weip', 'wfiis', 'wggiis', 'wggios', 'wgig', 'wh', 'wieit', 'wimic', 'wimiip', 'wimir', 'wmn', 'wms', 'wo', 'wwnig', 'wz'];
-
-const faculties = ['weaiiib', 'weip', 'wfiis', 'wggiis', 'wggios', 'wgig', 'wh', 'wieit'];
-const years = ['2016-2017', '2017-2018'];
-
-// const faculties = ['weaiiib'];
-
+const faculties = ['weaiiib', 'weip', 'wfiis', 'wggiis', 'wggios', 'wgig', 'wh', 'wieit', 'wimic', 'wimiip', 'wimir', 'wmn', 'wms', 'wo', 'wwnig', 'wz'];
+const years = ['2012-2013', '2013-2014', '2014-2015', '2015-2016', '2016-2017', '2017-2018', '2018-2019'];
 
 function fetchSyllabus(url, method = 'GET') {
   const options = {
     method,
     mode: 'no-cors',
     cache: 'no-cache',
+    credentials: 'include',
+    timeout: 0,
     headers: {
       'Accept-Language': 'pl',
       Accept: 'application/vnd.syllabus.agh.edu.pl.v2+json',
@@ -23,16 +19,14 @@ function fetchSyllabus(url, method = 'GET') {
   return fetch(url, options);
 }
 
-function delay(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
 async function fetchJsonFromSyllabus(url) {
   try {
     const res = await fetchSyllabus(url);
 
     if (res.status !== 200) {
-      await delay((Math.random() * 10000) + 20000);
+      if (res.status === 406) {
+        return {};
+      }
       return fetchJsonFromSyllabus(url);
     }
 
@@ -40,7 +34,7 @@ async function fetchJsonFromSyllabus(url) {
   } catch (err) {
     console.error(err);
   }
-  return null;
+  return {};
 }
 
 async function getProgrammesForYear(faculty, year) {
@@ -66,79 +60,64 @@ async function getProgrammes() {
   const programmesPromises = [];
   faculties.forEach((faculty) => {
     programmesPromises.push(getProgrammesForFaculty(faculty));
-    // console.log(programmesPromises[faculty]);
   });
   return Promise.all(programmesPromises);
 }
 
-function getProgramModulesUrl(url, faculty) {
-  const params = url.split('/');
-  const year = params[3];
-  const slug = params[7];
-  return `https://syllabuskrk.agh.edu.pl/${year}/magnesite/api/faculties/${faculty}/study_plans/${slug}/modules?fields=name,ects-points`;
+function getProgramModulesUrl(faculty, year, slug) {
+  return `http://syllabuskrk.agh.edu.pl/${year}/magnesite/api/faculties/${faculty}/study_plans/${slug}/modules`;
 }
 
-async function getModulesForStudyProgram(studyProgram, facultyName) {
-  const result = studyProgram;
-  const newUrl = getProgramModulesUrl(studyProgram.url, facultyName);
-  result.modules = await fetchJsonFromSyllabus(newUrl);
-  return result;
+function parseModuleOwner(mod) {
+  const moduleOwner = mod.module_owner;
+  if (moduleOwner != null) {
+    let title = moduleOwner.employee_title;
+    if (title == null) {
+      title = '';
+    } else {
+      title += ' ';
+    }
+    return `${title}${moduleOwner.name} ${moduleOwner.surname}`;
+  }
+  return 'undefined';
 }
 
-async function getModulesForStudyLevel(entry, facultyName) {
-  const result = entry;
-  result.study_programmes = await Promise.all(entry.study_programmes.map(async studyProgram => getModulesForStudyProgram(studyProgram, facultyName)));
-  return result;
-}
-
-async function getModulesForStudyType(entry, facultyName) {
-  const result = entry;
-  result.levels = await Promise.all(entry.levels.map(async level => getModulesForStudyLevel(level, facultyName)));
-  return result;
-}
-
-async function getModulesForYear(entry, facultyName) {
-  const result = entry;
-  result.syllabus.study_types = await Promise.all(entry.syllabus.study_types.map(async studyType => await getModulesForStudyType(studyType, facultyName)));
-  return result;
-}
-
-async function getModulesForFaculty(entry) {
-  const results = entry.programmes.map(async (element) => {
-    const result = element;
-    result.year_programmes = await getModulesForYear(element.year_programmes, entry.faculty);
-    return result;
+function parseModuleActivities(mod) {
+  const activities = {};
+  mod.module_activities.forEach((element) => {
+    const activity = element.module_activity;
+    activities[activity.type] = activity.classes_hours;
   });
-  return Promise.all(results);
-}
-
-async function getModules(syllabus) {
-  const results = syllabus.map(async (element) => {
-    const result = element;
-    result.programmes = await getModulesForFaculty(element);
-    return result;
-  });
-  return Promise.all(results);
+  return activities;
 }
 
 function parseModules(modules) {
   const parsed = {};
 
-  if (modules.syllabus === undefined) {
-    return {};
-  }
-
   modules.syllabus.assignments.forEach((element) => {
     const mod = element.assignment.module;
-    parsed[mod.name] = { ects: mod.ects_points };
+    parsed[mod.name] = {
+      code: element.assignment.module_code,
+      ects: mod.ects_points,
+      owner: parseModuleOwner(mod),
+      activities: parseModuleActivities(mod),
+    };
   });
   return parsed;
 }
 
+function parseProgram(studyProgram) {
+  const params = studyProgram.url.split('/');
+  const year = params[3];
+  const slug = params[7];
+
+  return { year, slug };
+}
+
 function parseProgrammesForLevel(levelProgrammes) {
   const parsed = {};
-  levelProgrammes.study_programmes.forEach((studyProgrammes) => {
-    parsed[studyProgrammes.name] = parseModules(studyProgrammes.modules);
+  levelProgrammes.study_programmes.forEach((studyProgram) => {
+    parsed[studyProgram.name] = parseProgram(studyProgram);
   });
   return parsed;
 }
@@ -177,9 +156,21 @@ function parseProgrammes(entries) {
 
 async function getSyllabus() {
   const entries = await getProgrammes();
-  const completeEntries = await getModules(entries);
-  const parsedEntries = parseProgrammes(completeEntries);
+  const parsedEntries = parseProgrammes(entries);
   return parsedEntries;
 }
 
-module.exports = { getSyllabus };
+
+async function getModulesForProgram(faculty, year, slug) {
+  try {
+    const newUrl = getProgramModulesUrl(faculty, year, slug);
+    const response = await fetchJsonFromSyllabus(newUrl);
+    const modules = parseModules(response);
+    return modules;
+  } catch (err) {
+    console.log(err);
+  }
+  return {};
+}
+
+module.exports = { getSyllabus, getModulesForProgram };

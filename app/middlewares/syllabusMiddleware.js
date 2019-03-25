@@ -14,7 +14,7 @@ const types = (req, res, next) => {
   // TODO: implement getting from cache or if empty from syllabus
 };
 
-const faculties = async (req, res, next) => {
+const programmes = async (req, res, next) => {
   res.json(await helper.getSyllabus());
 };
 
@@ -22,7 +22,8 @@ const years = (req, res, next) => {
   // TODO: implement getting from cache or if empty from syllabus
 };
 
-const subjects = (req, res, next) => {
+const subjects = async (req, res, next) => {
+  res.json(await helper.getModulesForProgram(req.query.faculty, req.query.year, req.query.slug));
   // TODO: implement getting from cache or if empty from syllabus
 };
 
@@ -34,7 +35,7 @@ module.exports = {
   departments,
   cycles,
   types,
-  faculties,
+  programmes,
   years,
   subjects,
   prices,
