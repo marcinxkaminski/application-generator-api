@@ -19,17 +19,20 @@ function fetchSyllabus(url, method = 'GET') {
   return fetch(url, options);
 }
 
+async function attemptToFetchSyllabus(url, attemptsNumber = 1) {
+  for (var i = 0; i <= attemptsNumber; ++i) {
+    const res = await fetchSyllabus(url);
+
+    if (res.status === 200) {
+      return res.json();
+    }
+  }
+  return {};
+}
+
 async function fetchJsonFromSyllabus(url) {
   try {
     const res = await fetchSyllabus(url);
-
-    if (res.status !== 200) {
-      if (res.status === 406) {
-        return {};
-      }
-      return fetchJsonFromSyllabus(url);
-    }
-
     return res.json();
   } catch (err) {
     console.error(err);
@@ -37,9 +40,9 @@ async function fetchJsonFromSyllabus(url) {
   return {};
 }
 
-async function getProgrammesForYear(faculty, year) {
+async function fetchProgrammesForYear(faculty, year) {
   try {
-    const res = await fetchJsonFromSyllabus(`https://syllabuskrk.agh.edu.pl/${year}/magnesite/api/faculties/${faculty}/study_plans`);
+    const res = await attemptToFetchSyllabus(`https://syllabuskrk.agh.edu.pl/${year}/magnesite/api/faculties/${faculty}/study_plans`, 10);
     return { year, year_programmes: res };
   } catch (err) {
     console.error(err);
@@ -48,18 +51,18 @@ async function getProgrammesForYear(faculty, year) {
   return null;
 }
 
-async function getProgrammesForFaculty(faculty) {
+async function fetchProgrammesForFaculty(faculty) {
   const yearsPromises = [];
   years.forEach((year) => {
-    yearsPromises.push(getProgrammesForYear(faculty, year));
+    yearsPromises.push(fetchProgrammesForYear(faculty, year));
   });
   return { faculty, programmes: await Promise.all(yearsPromises) };
 }
 
-async function getProgrammes() {
+async function fetchProgrammes() {
   const programmesPromises = [];
   faculties.forEach((faculty) => {
-    programmesPromises.push(getProgrammesForFaculty(faculty));
+    programmesPromises.push(fetchProgrammesForFaculty(faculty));
   });
   return Promise.all(programmesPromises);
 }
@@ -154,14 +157,13 @@ function parseProgrammes(entries) {
   return programmes;
 }
 
-async function getSyllabus() {
-  const entries = await getProgrammes();
+async function getProgrammesFromSyllabus() {
+  const entries = await fetchProgrammes();
   const parsedEntries = parseProgrammes(entries);
   return parsedEntries;
 }
 
-
-async function getModulesForProgram(faculty, year, slug) {
+async function getModulesFromSyllabus(faculty, year, slug) {
   try {
     const newUrl = getProgramModulesUrl(faculty, year, slug);
     const response = await fetchJsonFromSyllabus(newUrl);
@@ -173,4 +175,4 @@ async function getModulesForProgram(faculty, year, slug) {
   return {};
 }
 
-module.exports = { getSyllabus, getModulesForProgram };
+module.exports = { getProgrammesFromSyllabus, getModulesFromSyllabus };
