@@ -1,18 +1,44 @@
+const cron = require('node-cron');
+const path = require('path');
+const fs = require('fs');
+
 const cache = require('./../data/cache');
-const SyllabusHelper = require('./../helpers/syllabusHelper');
+const { getSyllabus } = require('./../helpers/syllabusHelper');
 
-const get = (key) => {
-  const result = cache.get(key);
-  // TODO: handle if result is not empty then return, else download data from syllabus and set it
-  SyllabusHelper(result);
-};
+async function setValuesFromObjectInCache(obj) {
+  const setPromises = [];
 
-const update = () => {
-  // TODO: periodically run function and update the cache
-  // every week at 3:33
-};
+  Object.entries(data).forEach(([key, value]) => {
+    setPromises.push(() => { cache.set(key, value); });
+  });
+
+  Promise.all(setPromises);
+}
+
+async function update() {
+  try {
+    const data = await getSyllabus();
+    if(data){
+      setValuesFromObjectInCache();
+    }
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+async function get(field) {
+  const result = cache.get(field);
+
+  if (!result) {
+    await update();
+  }
+
+  return cache.get(field);
+}
+
+cron.schedule('5 5 * * 7', update);
+_setValuesFromObjectInCache(JSON.parse(fs.readFileSync(__dirname + '../data/staticData.json') || {}));
 
 module.exports = {
   get,
-  update,
 };

@@ -4,6 +4,7 @@
   "description": "API for generator of application for an entry with an ECTS deficit for AGH in Cracow (UST). ",
   "main": "app/app.js",
   "scripts": {
+    "start": "node app/app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "eslint:fix": "eslint --fix --ext .js app"
   },
@@ -27,6 +28,7 @@
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.16.4",
+    "node-cron": "^2.0.3",
     "node-fetch": "^2.3.0"
   },
   "devDependencies": {
