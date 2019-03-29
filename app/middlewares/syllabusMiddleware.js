@@ -1,43 +1,53 @@
 const cache = require('../helpers/cacheManager');
-const helper = require('../helpers/syllabusHelper');
 
-const faculties = (req, res, next) => {
-  // TODO: implement getting from cache or if empty from syllabus
+function respond(res, result) {
+  try {
+    res.status(200).json(result);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send();
+  }
+}
 
-};
+async function faculties(req, res) {
+  return respond(res, await cache.get('faculties'));
+}
 
-const cycles = (req, res, next) => {
-  // TODO: implement getting from cache or if empty from syllabus
-};
+async function years(req, res) {
+  respond(res, await cache.get('years'));
+}
 
-const types = (req, res, next) => {
-  // TODO: implement getting from cache or if empty from syllabus
-};
+async function types(req, res) {
+  respond(res, await cache.get('types'));
+}
 
-const programmes = async (req, res, next) => {
-  res.json(await helper.getProgrammesFromSyllabus());
-  // TODO: implement getting from cache if not empty
-};
+async function levels(req, res) {
+  respond(res, await cache.get('levels'));
+}
 
-const years = (req, res, next) => {
-  // TODO: implement getting from cache or if empty from syllabus
-};
+async function fields(req, res) {
+  respond(res, await cache.get('programmes', req.query.faculty, req.query.year, req.query.type, req.query.level));
+}
 
-const subjects = async (req, res, next) => {
-  res.json(await helper.getModulesFromSyllabus(req.query.faculty, req.query.year, req.query.slug));
-  // TODO: implement getting from cache if not empty
-};
+async function mods(req, res) {
+  respond(res, await cache.get('programmes', req.query.faculty, req.query.year, req.query.type, req.query.level, req.query.field, 'modules'));
+}
 
-const prices = (req, res, next) => {
-  // TODO: implement getting from cache or if empty from syllabus
-};
+async function mod(req, res) {
+  respond(res, await cache.get('programmes', req.query.faculty, req.query.year, req.query.type, req.query.level, req.query.field, 'modules', req.params.module));
+}
+
+async function test(req, res) {
+  respond(res, await cache.get());
+}
 
 module.exports = {
   faculties,
-  cycles,
-  types,
-  programmes,
   years,
-  subjects,
-  prices,
+  types,
+  levels,
+  fields,
+  mods,
+  mod,
+  test,
 };

@@ -1,7 +1,6 @@
 const fetch = require('node-fetch');
-
-const faculties = ['weaiiib', 'weip', 'wfiis', 'wggiis', 'wggios', 'wgig', 'wh', 'wieit', 'wimic', 'wimiip', 'wimir', 'wmn', 'wms', 'wo', 'wwnig', 'wz'];
-const years = ['2012-2013', '2013-2014', '2014-2015', '2015-2016', '2016-2017', '2017-2018', '2018-2019'];
+const prices = require('./../data/staticPrices.json');
+const textUtils = require('./../helpers/textUtils');
 
 function fetchSyllabus(url, method = 'GET') {
   const options = {
@@ -20,14 +19,13 @@ function fetchSyllabus(url, method = 'GET') {
 }
 
 async function attemptToFetchSyllabus(url, attemptsNumber = 1) {
-  for (var i = 0; i <= attemptsNumber; ++i) {
+  for (let i = 0; i <= attemptsNumber; ++i) {
     const res = await fetchSyllabus(url);
 
     if (res.status === 200) {
       return res.json();
     }
   }
-  return {};
 }
 
 async function fetchJsonFromSyllabus(url) {
@@ -51,7 +49,7 @@ async function fetchProgrammesForYear(faculty, year) {
   return null;
 }
 
-async function fetchProgrammesForFaculty(faculty) {
+async function fetchProgrammesForFaculty(faculty, years) {
   const yearsPromises = [];
   years.forEach((year) => {
     yearsPromises.push(fetchProgrammesForYear(faculty, year));
@@ -59,10 +57,10 @@ async function fetchProgrammesForFaculty(faculty) {
   return { faculty, programmes: await Promise.all(yearsPromises) };
 }
 
-async function fetchProgrammes() {
+async function fetchProgrammes(faculties, years) {
   const programmesPromises = [];
   faculties.forEach((faculty) => {
-    programmesPromises.push(fetchProgrammesForFaculty(faculty));
+    programmesPromises.push(fetchProgrammesForFaculty(faculty, years));
   });
   return Promise.all(programmesPromises);
 }
@@ -74,15 +72,12 @@ function getProgramModulesUrl(faculty, year, slug) {
 function parseModuleOwner(mod) {
   const moduleOwner = mod.module_owner;
   if (moduleOwner != null) {
-    let title = moduleOwner.employee_title;
-    if (title == null) {
-      title = '';
-    } else {
-      title += ' ';
-    }
-    return `${title}${moduleOwner.name} ${moduleOwner.surname}`;
+    const title = moduleOwner.employee_title ? `${moduleOwner.employee_title} `.toLowerCase() : '';
+    const name = textUtils.capitalize(moduleOwner.name);
+    const surname = textUtils.capitalize(moduleOwner.surname);
+    return `${title}${name} ${surname}`;
   }
-  return 'undefined';
+  return null;
 }
 
 function parseModuleActivities(mod) {
@@ -94,7 +89,7 @@ function parseModuleActivities(mod) {
   return activities;
 }
 
-function parseModules(modules) {
+function parseModules(modules, faculty) {
   const parsed = {};
 
   modules.syllabus.assignments.forEach((element) => {
@@ -104,6 +99,7 @@ function parseModules(modules) {
       ects: mod.ects_points,
       owner: parseModuleOwner(mod),
       activities: parseModuleActivities(mod),
+      price: prices[mod.name] || prices[faculty] || 5,
     };
   });
   return parsed;
@@ -111,10 +107,8 @@ function parseModules(modules) {
 
 function parseProgram(studyProgram) {
   const params = studyProgram.url.split('/');
-  const year = params[3];
   const slug = params[7];
-
-  return { year, slug };
+  return slug;
 }
 
 function parseProgrammesForLevel(levelProgrammes) {
@@ -157,20 +151,20 @@ function parseProgrammes(entries) {
   return programmes;
 }
 
-async function getProgrammesFromSyllabus() {
-  const entries = await fetchProgrammes();
+async function getProgrammesFromSyllabus(...[faculties, years]) {
+  const entries = await fetchProgrammes(faculties, years);
   const parsedEntries = parseProgrammes(entries);
-  return parsedEntries;
+  return { programmes: parsedEntries };
 }
 
 async function getModulesFromSyllabus(faculty, year, slug) {
   try {
     const newUrl = getProgramModulesUrl(faculty, year, slug);
     const response = await fetchJsonFromSyllabus(newUrl);
-    const modules = parseModules(response);
-    return modules;
+    const modules = parseModules(response, faculty);
+    return { modules };
   } catch (err) {
-    console.log(err);
+    console.error(err);
   }
   return {};
 }

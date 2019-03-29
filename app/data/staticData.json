@@ -1,2 +1,6 @@
 {
+    "faculties": ["weaiiib", "weip", "wfiis", "wggiis", "wggios", "wgig", "wh", "wieit", "wimic", "wimiip", "wimir", "wmn", "wms", "wo", "wwnig", "wz"],
+    "years": ["2012-2013", "2013-2014", "2014-2015", "2015-2016", "2016-2017", "2017-2018", "2018-2019"],
+    "levels": ["1","2","3"],
+    "types": ["stacjonarne", "niestacjonarne"]
 }

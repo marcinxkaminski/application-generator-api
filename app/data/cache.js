@@ -1,21 +1,19 @@
 const cache = {
-  departments: [],
-  cycles: [],
-  types: [],
   faculties: [],
   years: [],
-  subjects: [],
-  prices: {},
-  deans: {},
+  types: [],
+  levels: [],
+  programmes: {},
+  modules: {},
 };
 
 async function set(key, value) {
   if (key && value) {
     cache[key] = value;
   }
-};
+}
 
-function get(key) { return cache[key] };
+function get(key) { return key ? cache[key] : cache; }
 
 module.exports = {
   get,
