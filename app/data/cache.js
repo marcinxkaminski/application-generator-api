@@ -4,7 +4,6 @@ const cache = {
   types: [],
   levels: [],
   programmes: {},
-  modules: {},
 };
 
 async function set(key, value) {

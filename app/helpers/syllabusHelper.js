@@ -2,6 +2,10 @@ const fetch = require('node-fetch');
 const prices = require('./../data/staticPrices.json');
 const textUtils = require('./../helpers/textUtils');
 
+const MAX_FETCH_ATTEMPTS = 15;
+const DEFAULT_PRICE = 0;
+const SLUG_INDEX_IN_STUDY_PROGRAM_URL = 7;
+
 function fetchSyllabus(url, method = 'GET') {
   const options = {
     method,
@@ -40,7 +44,7 @@ async function fetchJsonFromSyllabus(url) {
 
 async function fetchProgrammesForYear(faculty, year) {
   try {
-    const res = await attemptToFetchSyllabus(`https://syllabuskrk.agh.edu.pl/${year}/magnesite/api/faculties/${faculty}/study_plans`, 10);
+    const res = await attemptToFetchSyllabus(`https://syllabuskrk.agh.edu.pl/${year}/magnesite/api/faculties/${faculty}/study_plans`, MAX_FETCH_ATTEMPTS);
     return { year, year_programmes: res };
   } catch (err) {
     console.error(err);
@@ -71,7 +75,7 @@ function getProgramModulesUrl(faculty, year, slug) {
 
 function parseModuleOwner(mod) {
   const moduleOwner = mod.module_owner;
-  if (moduleOwner != null) {
+  if (moduleOwner) {
     const title = moduleOwner.employee_title ? `${moduleOwner.employee_title} `.toLowerCase() : '';
     const name = textUtils.capitalize(moduleOwner.name);
     const surname = textUtils.capitalize(moduleOwner.surname);
@@ -99,7 +103,7 @@ function parseModules(modules, faculty) {
       ects: mod.ects_points,
       owner: parseModuleOwner(mod),
       activities: parseModuleActivities(mod),
-      price: prices[mod.name] || prices[faculty] || 5,
+      price: prices[mod.name] || prices[faculty] || DEFAULT_PRICE,
     };
   });
   return parsed;
@@ -107,7 +111,7 @@ function parseModules(modules, faculty) {
 
 function parseProgram(studyProgram) {
   const params = studyProgram.url.split('/');
-  const slug = params[7];
+  const slug = params[SLUG_INDEX_IN_STUDY_PROGRAM_URL];
   return slug;
 }
 

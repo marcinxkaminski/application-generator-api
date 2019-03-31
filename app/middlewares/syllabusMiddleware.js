@@ -26,19 +26,18 @@ async function levels(req, res) {
 }
 
 async function fields(req, res) {
-  respond(res, await cache.get('programmes', req.query.faculty, req.query.year, req.query.type, req.query.level));
+  const { query } = req;
+  respond(res, await cache.get('programmes', query.faculty, query.year, query.type, query.level));
 }
 
 async function mods(req, res) {
-  respond(res, await cache.get('programmes', req.query.faculty, req.query.year, req.query.type, req.query.level, req.query.field, 'modules'));
+  const { query } = req;
+  respond(res, await cache.get('programmes', query.faculty, query.year, query.type, query.level, query.field, 'modules'));
 }
 
 async function mod(req, res) {
-  respond(res, await cache.get('programmes', req.query.faculty, req.query.year, req.query.type, req.query.level, req.query.field, 'modules', req.params.module));
-}
-
-async function test(req, res) {
-  respond(res, await cache.get());
+  const { query } = req;
+  respond(res, await cache.get('programmes', query.faculty, query.year, query.type, query.level, query.field, 'modules', req.params.module));
 }
 
 module.exports = {
@@ -49,5 +48,4 @@ module.exports = {
   fields,
   mods,
   mod,
-  test,
 };
