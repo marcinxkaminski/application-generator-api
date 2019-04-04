@@ -10,7 +10,7 @@ function respond(res, result) {
 }
 
 async function faculties(req, res) {
-  return respond(res, await cache.get('faculties'));
+  respond(res, await cache.get('faculties'));
 }
 
 async function years(req, res) {
@@ -26,17 +26,17 @@ async function levels(req, res) {
 }
 
 async function fields(req, res) {
-  const { query } = req;
+  const query = req.query || {};
   respond(res, await cache.get('programmes', query.faculty, query.year, query.type, query.level));
 }
 
 async function mods(req, res) {
-  const { query } = req;
+  const query = req.query || {};
   respond(res, await cache.get('programmes', query.faculty, query.year, query.type, query.level, query.field, 'modules'));
 }
 
 async function mod(req, res) {
-  const { query } = req;
+  const query = req.query || {};
   respond(res, await cache.get('programmes', query.faculty, query.year, query.type, query.level, query.field, 'modules', req.params.module));
 }
 

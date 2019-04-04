@@ -23,13 +23,16 @@ function fetchSyllabus(url, method = 'GET') {
 }
 
 async function attemptToFetchSyllabus(url, attemptsNumber = 1) {
+  // eslint-disable-next-line no-plusplus
   for (let i = 0; i <= attemptsNumber; ++i) {
+    // eslint-disable-next-line no-await-in-loop
     const res = await fetchSyllabus(url);
 
     if (res.status === 200) {
       return res.json();
     }
   }
+  return null;
 }
 
 async function fetchJsonFromSyllabus(url) {

@@ -15,7 +15,9 @@ async function setValuesFromObjectInCache(obj) {
 }
 
 async function updateModules(key, ...[faculty, year, type, level, field]) {
+  // eslint-disable-next-line no-use-before-define
   const programmes = await get(key);
+  // eslint-disable-next-line no-use-before-define
   const slug = await get('programmes', faculty, year, type, level, field);
   const modules = await getModulesFromSyllabus(faculty, year, slug);
   Promise.all([programmes, slug, modules]);
@@ -60,20 +62,16 @@ async function updateAndGet(key, ...params) {
 }
 
 async function get(key, ...params) {
-  let result = getParameterFromObject(key, params);
-  result = !result ? await updateAndGet(key, ...params) : result;
+  const result = getParameterFromObject(key, params) || (await updateAndGet(key, ...params));
   return result;
 }
 
 cron.schedule('5 5 * * 7', update);
 setValuesFromObjectInCache(JSON.parse(fs.readFileSync(path.resolve(__dirname, '../data/staticData.json')) || {}));
-
-async function initializeCache() {
+(async () => {
   await update();
   console.log('ready');
-}
-
-initializeCache();
+})();
 
 module.exports = {
   get,
