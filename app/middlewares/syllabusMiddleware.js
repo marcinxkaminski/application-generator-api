@@ -27,7 +27,7 @@ async function levels(req, res) {
 
 async function fields(req, res) {
   const query = req.query || {};
-  respond(res, await cache.get('programmes', query.faculty, query.year, query.type, query.level));
+  respond(res, Object.keys(await cache.get('programmes', query.faculty, query.year, query.type, query.level)));
 }
 
 async function mods(req, res) {
