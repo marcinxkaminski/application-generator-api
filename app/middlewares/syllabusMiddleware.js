@@ -1,39 +1,51 @@
-// TODO: use redis for caching or shall we write our own cache?
+const cache = require('../helpers/cacheManager');
 
-const departments = (req, res, next) => {
-  // TODO: implement getting from cache or if empty from syllabus
-};
+function respond(res, result) {
+  try {
+    res.status(200).json(result);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send();
+  }
+}
 
-const cycles = (req, res, next) => {
-  // TODO: implement getting from cache or if empty from syllabus
-};
+async function faculties(req, res) {
+  respond(res, await cache.get('faculties'));
+}
 
-const types = (req, res, next) => {
-  // TODO: implement getting from cache or if empty from syllabus
-};
+async function years(req, res) {
+  respond(res, await cache.get('years'));
+}
 
-const faculties = (req, res, next) => {
-  // TODO: implement getting from cache or if empty from syllabus
-};
+async function types(req, res) {
+  respond(res, await cache.get('types'));
+}
 
-const years = (req, res, next) => {
-  // TODO: implement getting from cache or if empty from syllabus
-};
+async function levels(req, res) {
+  respond(res, await cache.get('levels'));
+}
 
-const subjects = (req, res, next) => {
-  // TODO: implement getting from cache or if empty from syllabus
-};
+async function fields(req, res) {
+  const query = req.query || {};
+  respond(res, await cache.get('programmes', query.faculty, query.year, query.type, query.level));
+}
 
-const prices = (req, res, next) => {
-  // TODO: implement getting from cache or if empty from syllabus
-};
+async function mods(req, res) {
+  const query = req.query || {};
+  respond(res, await cache.get('programmes', query.faculty, query.year, query.type, query.level, query.field, 'modules'));
+}
+
+async function mod(req, res) {
+  const query = req.query || {};
+  respond(res, await cache.get('programmes', query.faculty, query.year, query.type, query.level, query.field, 'modules', req.params.module));
+}
 
 module.exports = {
-  departments,
-  cycles,
-  types,
   faculties,
   years,
-  subjects,
-  prices,
+  types,
+  levels,
+  fields,
+  mods,
+  mod,
 };
