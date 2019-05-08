@@ -1,0 +1,103 @@
+{
+    "faculties": [
+        "weaiiib",
+        "weip",
+        "wfiis",
+        "wggiis",
+        "wggios",
+        "wgig",
+        "wh",
+        "wieit",
+        "wimic",
+        "wimiip",
+        "wimir",
+        "wmn",
+        "wms",
+        "wo",
+        "wwnig",
+        "wz"
+    ],
+    "years": [
+        "2013-2014",
+        "2014-2015",
+        "2015-2016",
+        "2016-2017",
+        "2017-2018",
+        "2018-2019"
+    ],
+    "levels": [
+        "1",
+        "2",
+        "3"
+    ],
+    "types": [
+        "stacjonarne",
+        "niestacjonarne"
+    ],
+    "deans": {
+        "weaiiib": {
+            "faculty": "Wydział Elektrotechniki, Automatyki, Informatyki i Inżynierii Biomedycznej",
+            "nameAndSurname": "dr inż. Krzysztof Kluza"
+        },
+        "weip": {
+            "faculty": "Wydział Energetyki i Paliw",
+            "nameAndSurname": "dr inż. Leszek Kurcz"
+        },
+        "wfiis": {
+            "faculty": "Wydział Fizyki i Informatyki Stosowanej",
+            "nameAndSurname": "dr hab. inż. Krzysztof Malarz"
+        },
+        "wggiis": {
+            "faculty": "Wydział Geodezji Górniczej i Inżynierii Środowiska",
+            "nameAndSurname": "dr hab. inż. Paweł Hanus"
+        },
+        "wggios": {
+            "faculty": "Wydział Geologii, Geofizyki i Ochrony Środowiska",
+            "nameAndSurname": "dr hab. inż. Ewa Adamiec"
+        },
+        "wgig": {
+            "faculty": "Wydział GÓRNICTWA I GEOINŻYNIERII",
+            "nameAndSurname": "dr hab. inż. Radosław Pomykała"
+        },
+        "wh": {
+            "faculty": "Wydział Humanistyczny",
+            "nameAndSurname": "dr Ewa Migaczewska"
+        },
+        "wieit": {
+            "faculty": "Wydział Informatyki, Elektroniki i Telekomunikacji",
+            "nameAndSurname": "dr hab. inż. Renata Słota"
+        },
+        "wimic": {
+            "faculty": "Wydział Inżynierii Materiałowej i Ceramiki",
+            "nameAndSurname": "dr hab. inż. Paweł Pasierb"
+        },
+        "wimiip": {
+            "faculty": "Wydział Inżynierii Metali i Informatyki Przemysłowej",
+            "nameAndSurname": "dr hab. inż. Tomasz Śleboda"
+        },
+        "wimir": {
+            "faculty": "Wydział Inżynierii Mechanicznej i Robotyki",
+            "nameAndSurname": "prof. dr hab. inż. Edward Michlowicz"
+        },
+        "wmn": {
+            "faculty": "Wydział Metali Nieżelaznych",
+            "nameAndSurname": "dr hab. inż. Beata Leszczyńska-Madej"
+        },
+        "wms": {
+            "faculty": "Wydział Matematyki Stosowanej",
+            "nameAndSurname": "dr Maria Malejki"
+        },
+        "wo": {
+            "faculty": "Wydział Odlewnictwa",
+            "nameAndSurname": "dr hab. Halina Krawiec"
+        },
+        "wwnig": {
+            "faculty": "Wydział Wiertnictwa, Nafty i Gazu",
+            "nameAndSurname": "dr inż. Aneta Sapińska-Śliwa"
+        },
+        "wz": {
+            "faculty": "Wydział Zarządzania",
+            "nameAndSurname": "dr inż. Marek Dudek"
+        }
+    }
+}
