@@ -6,14 +6,6 @@
 
 This app allows you to quickly generate application for entry with ECTS deficit to another term in college at Akademia Górniczo-Hutnicza (University Of Science And Tehnology) in Cracow.
 
-### Prerequisites
-   - [Cors](https://github.com/expressjs/cors)
-   - [Express](https://github.com/expressjs/express)
-   - [Node-Cron](https://github.com/node-cron/node-cron)
-   - [Node-Fetch](https://github.com/bitinn/node-fetch)
-   - [Eslint](https://github.com/eslint/eslint)
-   - [Eslint-Airbnb](https://github.com/airbnb/javascript)
-
 
 ### Installing
 
